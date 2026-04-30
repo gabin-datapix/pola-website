@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PÖLA — Artisan Fleuriste · Sautron</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================
+   TOKENS
+========================================================== */
+:root {
+  --ivory:      #F7F3EE;
+  --linen:      #EDE8DF;
+  --warm:       #FDFAF6;
+  --charcoal:   #2A211C;
+  --charcoal2:  #3D2E25;
+  --brown-mid:  #7A5C48;
+  --terra:      #C4714A;
+  --terra-dk:   #A85B38;
+  --sage:       #8A9E7F;
+  --gold:       #C9A96E;
+  --text:       #2A211C;
+  --text2:      #5C4235;
+  --text3:      #8A7060;
+  --border:     rgba(92,61,42,0.1);
+}
+
+/* ==========================================================
+   RESET & BASE
+========================================================== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Jost', sans-serif; background: var(--ivory); color: var(--text); overflow-x: hidden; }
+img { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+
+/* ==========================================================
+   TYPOGRAPHY UTILITIES
+========================================================== */
+.label {
+  font-size: 0.64rem; letter-spacing: 0.36em; text-transform: uppercase;
+  color: var(--terra); display: flex; align-items: center; gap: 0.85rem;
+}
+.label::before { content: ''; width: 2rem; height: 1px; background: var(--terra); flex-shrink: 0; }
+.label-center { justify-content: center; }
+.label-center::before, .label-center::after { content: ''; flex: 1; max-width: 3rem; height: 1px; background: var(--terra); }
+.label-center::before { width: auto; }
+.label-gold { color: var(--gold); }
+.label-gold::before { background: var(--gold); }
+.label-light { color: rgba(255,255,255,0.5); }
+.label-light::before { background: rgba(255,255,255,0.45); }
+.h-xl {
+  font-family: 'Cormorant Garamond', serif; font-weight: 300;
+  font-size: clamp(3rem, 6.5vw, 6rem); line-height: 1.04; color: white;
+}
+.h-lg {
+  font-family: 'Cormorant Garamond', serif; font-weight: 300;
+  font-size: clamp(2.2rem, 4vw, 3.8rem); line-height: 1.1; color: var(--charcoal);
+}
+.h-md {
+  font-family: 'Cormorant Garamond', serif; font-weight: 300;
+  font-size: clamp(1.9rem, 3.2vw, 3rem); line-height: 1.12; color: var(--charcoal);
+}
+.h-xl em, .h-lg em, .h-md em { font-style: italic; }
+.body-txt {
+  font-size: 0.875rem; font-weight: 300; line-height: 1.9; color: var(--text3);
+}
+
+/* ==========================================================
+   BUTTONS
+========================================================== */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 0.9rem 2.2rem; transition: all 0.32s ease; cursor: pointer;
+  border: 1.5px solid transparent;
+}
+.btn-dark { background: var(--charcoal); color: var(--warm); border-color: var(--charcoal); }
+.btn-dark:hover { background: transparent; color: var(--charcoal); }
+.btn-terra { background: var(--terra); color: white; border-color: var(--terra); }
+.btn-terra:hover { background: var(--terra-dk); border-color: var(--terra-dk); }
+.btn-ghost-light { background: transparent; color: white; border-color: rgba(255,255,255,0.55); }
+.btn-ghost-light:hover { background: white; color: var(--charcoal); border-color: white; }
+.btn-ghost-gold { background: transparent; color: var(--gold); border-color: var(--gold); }
+.btn-ghost-gold:hover { background: var(--gold); color: var(--charcoal); }
+.btn-ghost-dark { background: transparent; color: var(--charcoal); border-color: var(--charcoal); }
+.btn-ghost-dark:hover { background: var(--charcoal); color: white; }
+.btn-arr::after { content: '→'; font-size: 0.85em; }
+
+/* ==========================================================
+   LOADER
+========================================================== */
+#loader {
+  position: fixed; inset: 0; background: var(--charcoal); z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 1.1rem;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
+}
+#loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.ld-name {
+  font-family: 'Cormorant Garamond', serif; font-size: 3.8rem; font-weight: 300;
+  letter-spacing: 0.3em; color: var(--warm);
+  opacity: 0; animation: fadeUp 0.9s ease 0.3s forwards;
+}
+.ld-sub {
+  font-size: 0.61rem; letter-spacing: 0.45em; text-transform: uppercase;
+  color: rgba(237,229,216,0.3);
+  opacity: 0; animation: fadeUp 0.9s ease 0.65s forwards;
+}
+.ld-bar {
+  width: 80px; height: 1px; background: rgba(237,229,216,0.08);
+  position: relative; overflow: hidden; margin-top: 0.25rem;
+}
+.ld-bar::after {
+  content: ''; position: absolute; left: -100%; top: 0;
+  width: 100%; height: 100%; background: var(--gold);
+  animation: fillBar 1.5s cubic-bezier(.4,0,.2,1) 0.5s forwards;
+}
+@keyframes fadeUp { to { opacity: 1; } }
+@keyframes fillBar { to { left: 0; } }
+
+/* ==========================================================
+   NAV
+========================================================== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 4.5rem;
+  transition: all 0.42s ease;
+}
+nav.scrolled {
+  background: rgba(255,255,255,0.98); backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 rgba(62,42,30,0.06), 0 2px 24px rgba(62,42,30,0.04);
+}
+.nav-logo { display: flex; align-items: center; }
+.nav-logo-img {
+  height: 52px; width: auto; display: none;
+  mix-blend-mode: multiply;
+}
+nav.scrolled .nav-logo-img { display: block; }
+.nav-logo-text {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300;
+  letter-spacing: 0.28em; color: white; transition: color 0.4s; display: block;
+}
+nav.scrolled .nav-logo-text { display: none; }
+.nav-links { display: flex; gap: 2.8rem; list-style: none; }
+.nav-links a {
+  font-size: 0.67rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.78); transition: color 0.3s;
+}
+nav.scrolled .nav-links a { color: var(--text2); }
+.nav-links a:hover, nav.scrolled .nav-links a:hover { color: var(--terra); }
+.nav-cta {
+  font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: white; border: 1px solid rgba(255,255,255,0.45);
+  padding: 0.58rem 1.5rem; transition: all 0.3s;
+}
+nav.scrolled .nav-cta { color: var(--charcoal); border-color: var(--charcoal); }
+.nav-cta:hover { background: var(--terra) !important; border-color: var(--terra) !important; color: white !important; }
+.burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+.burger span { display: block; width: 22px; height: 1.5px; background: white; transition: all 0.3s; }
+nav.scrolled .burger span { background: var(--charcoal); }
+
+/* ==========================================================
+   MOBILE MENU
+========================================================== */
+.m-menu {
+  display: none; position: fixed; inset: 0; background: var(--ivory);
+  z-index: 499; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
+}
+.m-menu.open { display: flex; }
+.m-menu a {
+  font-family: 'Cormorant Garamond', serif; font-size: 2.6rem;
+  font-weight: 300; color: var(--charcoal); letter-spacing: 0.04em; transition: color 0.3s;
+}
+.m-menu a:hover { color: var(--terra); }
+.m-close { position: absolute; top: 1.8rem; right: 2rem; font-size: 1.25rem; cursor: pointer; color: var(--text2); }
+.m-logo { position: absolute; top: 1.8rem; left: 2rem; }
+.m-logo img { height: 52px; width: auto; mix-blend-mode: multiply; }
+
+/* ==========================================================
+   HERO
+========================================================== */
+.hero {
+  height: 100svh; min-height: 660px;
+  position: relative; overflow: hidden;
+  display: flex; align-items: flex-end;
+}
+.hero-bg { position: absolute; inset: 0; }
+.hero-bg img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 25%;
+}
+.hero-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    linear-gradient(to top, rgba(20,12,6,0.78) 0%, rgba(20,12,6,0.25) 45%, rgba(20,12,6,0.04) 100%),
+    linear-gradient(to right, rgba(20,12,6,0.38) 0%, transparent 55%);
+}
+.hero-inner {
+  position: relative; z-index: 2; width: 100%;
+  padding: 0 6rem 5.5rem;
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.hero-left { max-width: 620px; }
+.hero-tag {
+  font-size: 0.63rem; letter-spacing: 0.38em; text-transform: uppercase;
+  color: rgba(255,255,255,0.55); margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.9rem;
+}
+.hero-tag::before { content: ''; width: 2.2rem; height: 1px; background: var(--terra); flex-shrink: 0; }
+.hero-title {
+  font-family: 'Cormorant Garamond', serif; font-weight: 300;
+  font-size: clamp(3.2rem, 6.5vw, 6rem); line-height: 1.04;
+  color: white; margin-bottom: 1.6rem;
+}
+.hero-title em { font-style: italic; color: rgba(255,255,255,0.7); }
+.hero-desc {
+  font-size: 0.875rem; font-weight: 300; line-height: 1.85;
+  color: rgba(255,255,255,0.6); max-width: 400px; margin-bottom: 2.5rem;
+}
+.hero-btns { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.hero-right { display: flex; flex-direction: column; align-items: flex-end; gap: 1rem; }
+.hero-scroll {
+  display: flex; flex-direction: column; align-items: center; gap: 0.45rem;
+  color: rgba(255,255,255,0.4); font-size: 0.57rem; letter-spacing: 0.32em; text-transform: uppercase;
+}
+.hero-scroll-line {
+  width: 1px; height: 2.8rem;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+  animation: scrollLine 2.2s ease-in-out infinite;
+}
+@keyframes scrollLine { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+/* ==========================================================
+   STRIP
+========================================================== */
+.strip { background: var(--charcoal); padding: 0.88rem 0; overflow: hidden; }
+.strip-track {
+  display: flex; animation: marquee 32s linear infinite; white-space: nowrap;
+}
+.strip-item {
+  display: inline-flex; align-items: center; gap: 2.2rem; padding: 0 2.2rem;
+  font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(237,229,216,0.45);
+}
+.strip-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--terra); flex-shrink: 0; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ==========================================================
+   INTRO PROMISE
+========================================================== */
+.intro {
+  padding: 7.5rem 6rem;
+  background: var(--warm);
+  text-align: center;
+}
+.intro-eyebrow {
+  font-size: 0.63rem; letter-spacing: 0.38em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 2rem;
+  display: flex; align-items: center; justify-content: center; gap: 1.2rem;
+}
+.intro-eyebrow::before, .intro-eyebrow::after {
+  content: ''; flex-shrink: 0; width: 3.5rem; height: 1px; background: var(--sage);
+}
+.intro-title {
+  font-family: 'Cormorant Garamond', serif; font-weight: 300;
+  font-size: clamp(2.2rem, 4.5vw, 4rem); line-height: 1.12;
+  color: var(--charcoal); max-width: 780px; margin: 0 auto 1.8rem;
+}
+.intro-title em { font-style: italic; color: var(--terra); }
+.intro-body {
+  font-size: 0.9rem; font-weight: 300; line-height: 1.9;
+  color: var(--text3); max-width: 500px; margin: 0 auto 2.8rem;
+}
+.intro-pills {
+  display: flex; align-items: center; justify-content: center;
+  gap: 3rem; flex-wrap: wrap;
+}
+.intro-pill {
+  font-size: 0.63rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text2); display: flex; align-items: center; gap: 0.55rem;
+}
+.intro-pill::before { content: '✦'; color: var(--terra); font-size: 0.45rem; }
+
+/* ==========================================================
+   SERVICES
+========================================================== */
+.services { padding: 6.5rem 4.5rem; background: var(--ivory); }
+.section-hd { margin-bottom: 3.5rem; }
+.section-hd .label { margin-bottom: 1rem; }
+.services-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+}
+.s-card {
+  background: var(--warm); overflow: hidden; position: relative; cursor: pointer;
+  display: flex; flex-direction: column;
+}
+.s-img { overflow: hidden; aspect-ratio: 4/5; flex-shrink: 0; }
+.s-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.62s cubic-bezier(.25,.46,.45,.94);
+}
+.s-card:hover .s-img img { transform: scale(1.045); }
+.s-body {
+  padding: 1.8rem 2rem 2rem;
+  border-top: 1.5px solid var(--linen);
+  flex: 1; display: flex; flex-direction: column;
+}
+.s-num {
+  font-family: 'Cormorant Garamond', serif; font-size: 0.68rem;
+  color: var(--terra); letter-spacing: 0.12em; margin-bottom: 0.55rem;
+}
+.s-name {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.28rem; font-weight: 400;
+  color: var(--charcoal); margin-bottom: 0.6rem; line-height: 1.2;
+}
+.s-desc {
+  font-size: 0.8rem; font-weight: 300; line-height: 1.75;
+  color: var(--text3); margin-bottom: 1.2rem; flex: 1;
+}
+.s-link {
+  font-size: 0.63rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--terra); display: flex; align-items: center; gap: 0.45rem;
+  transition: gap 0.3s; align-self: flex-start;
+}
+.s-link::after { content: '→'; }
+.s-card:hover .s-link { gap: 0.85rem; }
+
+/* ==========================================================
+   SAVOIR-FAIRE (editorial split)
+========================================================== */
+.savoir {
+  display: grid; grid-template-columns: 1fr 1fr; min-height: 680px;
+  background: var(--linen);
+}
+.savoir-img { overflow: hidden; }
+.savoir-img img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center;
+  transition: transform 0.9s ease;
+}
+.savoir:hover .savoir-img img { transform: scale(1.02); }
+.savoir-content {
+  padding: 6rem 5.5rem; display: flex; flex-direction: column; justify-content: center;
+}
+.savoir-content .label { margin-bottom: 1rem; }
+.savoir-pts {
+  display: flex; flex-direction: column; gap: 1.3rem; margin: 2rem 0 2.8rem;
+}
+.savoir-pt { display: flex; gap: 1rem; align-items: flex-start; }
+.savoir-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--terra); flex-shrink: 0; margin-top: 0.42rem;
+}
+.savoir-pt-txt { font-size: 0.82rem; font-weight: 300; line-height: 1.72; color: var(--text2); }
+.savoir-pt-txt strong {
+  font-weight: 500; color: var(--charcoal); display: block;
+  font-size: 0.87rem; margin-bottom: 0.1rem;
+}
+
+/* ==========================================================
+   LA BOUTIQUE (immersive)
+========================================================== */
+.boutique {
+  position: relative; height: 640px; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.boutique-bg { position: absolute; inset: 0; z-index: 0; }
+.boutique-bg img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 35%;
+}
+.boutique-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(16,9,4,0.72) 0%, rgba(16,9,4,0.45) 45%, rgba(16,9,4,0.2) 100%);
+}
+.boutique-panel {
+  position: relative; z-index: 2;
+  width: 90%; max-width: 600px; text-align: center;
+}
+.boutique-panel .label {
+  color: rgba(255,255,255,0.45); margin-bottom: 1.2rem;
+  justify-content: center;
+}
+.boutique-panel .label::before { display: none; }
+.boutique-title {
+  font-family: 'Cormorant Garamond', serif; font-weight: 300;
+  font-size: clamp(2.2rem, 3.5vw, 3.5rem); line-height: 1.08;
+  color: white; margin-bottom: 1.5rem;
+}
+.boutique-title em { font-style: italic; color: rgba(255,255,255,0.7); }
+.boutique-desc {
+  font-size: 0.875rem; font-weight: 300; line-height: 1.85;
+  color: rgba(255,255,255,0.62); margin-bottom: 2.2rem;
+}
+
+/* ==========================================================
+   PAULINE & LAURA
+========================================================== */
+.team { display: grid; grid-template-columns: 1.1fr 1fr; background: var(--warm); }
+.team-img { overflow: hidden; min-height: 560px; }
+.team-img img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+.team-content {
+  padding: 6rem 5.5rem; display: flex; flex-direction: column; justify-content: center;
+  background: var(--ivory);
+}
+.team-content .label { margin-bottom: 1rem; }
+.team-quote {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.5rem;
+  font-style: italic; font-weight: 300; color: var(--terra);
+  line-height: 1.45; margin: 1.5rem 0 2rem;
+  padding-left: 1.5rem; border-left: 2px solid var(--terra);
+}
+
+/* ==========================================================
+   L'UNIVERS PÖLA (remplace mariage)
+========================================================== */
+.univers { padding: 7rem 4.5rem; background: var(--warm); }
+.univers-hd { margin-bottom: 3.5rem; }
+.univers-hd .label { margin-bottom: 1rem; }
+.univers-intro {
+  font-size: 0.9rem; font-weight: 300; line-height: 1.9; color: var(--text3);
+  max-width: 580px; margin: 1rem 0 0;
+}
+.univers-grid {
+  display: grid; grid-template-columns: 1.05fr 1fr; gap: 1.5rem; align-items: start;
+}
+.univers-right { display: flex; flex-direction: column; gap: 1.5rem; }
+.univers-fig { position: relative; overflow: hidden; }
+.univers-fig img {
+  width: 100%; display: block; object-fit: cover;
+  transition: transform 0.62s cubic-bezier(.25,.46,.45,.94);
+}
+.univers-fig:hover img { transform: scale(1.03); }
+.univers-fig-main img { aspect-ratio: 3/4; }
+.univers-fig-top img { aspect-ratio: 4/3; }
+.univers-fig-bot img { aspect-ratio: 3/4; }
+.univers-cap {
+  font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--text3); margin-top: 0.75rem; display: block;
+}
+
+/* ==========================================================
+   MARIAGE (conservé pour les styles communs)
+========================================================== */
+.mariage { background: var(--charcoal); overflow: hidden; }
+.mariage-intro { display: grid; grid-template-columns: 1fr 1fr; min-height: 680px; }
+.mariage-img { overflow: hidden; }
+.mariage-img img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center top;
+  transition: transform 0.8s ease;
+}
+.mariage-img:hover img { transform: scale(1.03); }
+.mariage-panel {
+  padding: 6rem 5.5rem; display: flex; flex-direction: column; justify-content: center;
+}
+.mariage-panel .label-gold { margin-bottom: 1rem; }
+.mariage-title {
+  font-family: 'Cormorant Garamond', serif; font-weight: 300;
+  font-size: clamp(2rem, 3.5vw, 3.2rem); line-height: 1.1;
+  color: var(--warm); margin-bottom: 1.4rem;
+}
+.mariage-title em { font-style: italic; color: var(--gold); }
+.mariage-feats {
+  display: flex; flex-direction: column; gap: 0.78rem; margin: 1.8rem 0;
+}
+.mf {
+  display: flex; align-items: center; gap: 0.85rem;
+  font-size: 0.82rem; font-weight: 300; color: rgba(237,229,216,0.7);
+}
+.mf::before { content: '✦'; color: var(--gold); font-size: 0.48rem; flex-shrink: 0; }
+.mariage-gallery {
+  display: grid; grid-template-columns: 3fr 2fr;
+  gap: 3px; background: var(--charcoal);
+  height: 480px;
+}
+.mg-item { overflow: hidden; position: relative; }
+.mg-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.mg-item:last-child img { object-position: center top; }
+.mg-item:hover img { transform: scale(1.04); }
+.mg-cap {
+  position: absolute; bottom: 1.2rem; left: 1.4rem;
+  font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  background: rgba(20,12,6,0.35); padding: 0.3rem 0.7rem;
+}
+
+/* ==========================================================
+   ATELIERS
+========================================================== */
+.ateliers { padding: 6.5rem 4.5rem; background: var(--linen); }
+.ateliers .label { margin-bottom: 1rem; }
+.ateliers-layout {
+  display: grid; grid-template-columns: 1.15fr 1fr;
+  gap: 5rem; align-items: start; margin-top: 3.5rem;
+}
+.ateliers-img {
+  overflow: hidden; aspect-ratio: 4/5; position: sticky; top: 7.5rem;
+}
+.ateliers-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.ateliers-img:hover img { transform: scale(1.03); }
+.ateliers-body .body-txt { margin-bottom: 2rem; }
+.atelier-list { display: flex; flex-direction: column; gap: 2px; }
+.atelier-row {
+  display: grid; grid-template-columns: 4.2rem 1fr auto;
+  align-items: center; gap: 1.4rem;
+  padding: 1.35rem 1.6rem;
+  background: var(--warm); transition: background 0.3s; cursor: pointer;
+}
+.atelier-row:hover { background: var(--charcoal); }
+.atelier-row:hover .ar-date,
+.atelier-row:hover .ar-name,
+.atelier-row:hover .ar-type,
+.atelier-row:hover .ar-price { color: rgba(255,255,255,0.88) !important; }
+.ar-date {
+  font-family: 'Cormorant Garamond', serif; font-size: 0.85rem;
+  color: var(--terra); line-height: 1.3; transition: color 0.3s;
+}
+.ar-name {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.04rem;
+  color: var(--charcoal); transition: color 0.3s;
+}
+.ar-type {
+  font-size: 0.65rem; letter-spacing: 0.08em; color: var(--text3);
+  margin-top: 0.12rem; transition: color 0.3s;
+}
+.ar-price {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
+  color: var(--terra); font-weight: 500; transition: color 0.3s;
+}
+.ateliers-note {
+  margin-top: 2px; padding: 1.3rem 1.7rem;
+  background: var(--charcoal);
+  font-size: 0.77rem; font-weight: 300; line-height: 1.82;
+  color: rgba(237,229,216,0.55);
+}
+.ateliers-note strong { color: var(--gold); font-weight: 400; }
+
+/* ==========================================================
+   BOUTIQUE DÉCO
+========================================================== */
+.deco { padding: 6.5rem 4.5rem; background: var(--warm); }
+.deco .label { margin-bottom: 1rem; }
+.deco-intro { margin: 1rem 0 3rem; max-width: 580px; }
+.deco-grid {
+  display: grid; grid-template-columns: 1.6fr 1fr; grid-template-rows: 280px 280px;
+  gap: 2px;
+}
+.deco-main { grid-row: span 2; overflow: hidden; }
+.deco-sm { overflow: hidden; }
+.deco-main img, .deco-sm img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.deco-main:hover img, .deco-sm:hover img { transform: scale(1.04); }
+
+/* ==========================================================
+   GALERIE
+========================================================== */
+.galerie { padding: 6.5rem 4.5rem; background: var(--ivory); }
+.galerie-hd { text-align: center; margin-bottom: 3rem; }
+.galerie-hd .label-center { margin-bottom: 1rem; }
+.galerie-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 0.85fr;
+  grid-template-rows: 290px 290px;
+  gap: 3px;
+}
+.g-item { overflow: hidden; position: relative; cursor: pointer; }
+.g-item:first-child { grid-row: span 2; }
+.g-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.55s ease; }
+.g-item:hover img { transform: scale(1.06); }
+.g-over {
+  position: absolute; inset: 0;
+  background: rgba(42,33,28,0); transition: background 0.4s;
+}
+.g-item:hover .g-over { background: rgba(42,33,28,0.14); }
+.ig-cta { text-align: center; margin-top: 2.5rem; }
+.ig-link {
+  font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--text2); transition: color 0.3s;
+  display: inline-flex; align-items: center; gap: 0.6rem;
+}
+.ig-link:hover { color: var(--terra); }
+.ig-link::before { content: '◈'; font-size: 0.7rem; }
+
+/* ==========================================================
+   CONTACT
+========================================================== */
+.contact { background: var(--linen); }
+.contact-banner { position: relative; height: 440px; overflow: hidden; }
+.contact-banner img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 40%;
+}
+.contact-banner::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(16,9,4,0.02) 0%, rgba(16,9,4,0.65) 100%);
+}
+.contact-banner-txt {
+  position: absolute; bottom: 3.5rem; left: 6rem; z-index: 2;
+}
+.contact-banner-txt .label { color: rgba(255,255,255,0.5); margin-bottom: 0.9rem; }
+.contact-banner-txt .label::before { background: rgba(255,255,255,0.4); }
+.contact-banner-txt h2 {
+  font-family: 'Cormorant Garamond', serif; font-weight: 300;
+  font-size: clamp(2rem, 3.5vw, 3.2rem); color: white; line-height: 1.12;
+}
+.contact-banner-txt p {
+  font-size: 0.82rem; color: rgba(255,255,255,0.6);
+  margin-top: 0.5rem; letter-spacing: 0.04em;
+}
+.contact-body { display: grid; grid-template-columns: 1fr 1.25fr; }
+.contact-info { padding: 4.5rem 5rem 4.5rem 6rem; }
+.contact-info .label { margin-bottom: 2rem; }
+.contact-dets { display: flex; flex-direction: column; gap: 2rem; margin-bottom: 3rem; }
+.cd { display: flex; gap: 1.2rem; align-items: flex-start; }
+.cd-icon {
+  width: 2.1rem; height: 2.1rem; border: 1px solid var(--terra);
+  color: var(--terra); display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; flex-shrink: 0; font-style: normal;
+}
+.cd-lbl {
+  font-size: 0.59rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--text3); margin-bottom: 0.22rem;
+}
+.cd-val {
+  font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+  color: var(--charcoal); line-height: 1.65;
+}
+.contact-acts { display: flex; flex-direction: column; gap: 0.75rem; max-width: 240px; }
+.contact-form { padding: 4.5rem 5rem; background: var(--warm); }
+.form-ttl {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.65rem;
+  font-weight: 300; color: var(--charcoal); margin-bottom: 2rem;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-g { margin-bottom: 1.25rem; }
+.form-lbl {
+  display: block; font-size: 0.59rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 0.48rem;
+}
+.form-inp, .form-sel, .form-area {
+  width: 100%; background: var(--linen);
+  border: 1px solid rgba(92,61,42,0.1); padding: 0.82rem 1rem;
+  font-family: 'Jost', sans-serif; font-size: 0.82rem; color: var(--text);
+  outline: none; transition: border-color 0.3s; appearance: none;
+}
+.form-inp:focus, .form-sel:focus, .form-area:focus { border-color: var(--terra); }
+.form-area { resize: vertical; min-height: 88px; }
+.form-submit {
+  width: 100%; background: var(--charcoal); color: white; border: none;
+  padding: 1rem; font-family: 'Jost', sans-serif;
+  font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+  cursor: pointer; transition: background 0.3s; margin-top: 0.5rem;
+}
+.form-submit:hover { background: var(--terra); }
+
+/* ==========================================================
+   FOOTER
+========================================================== */
+footer { background: var(--charcoal); padding: 4rem 6rem 2.5rem; }
+.footer-top {
+  display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 4rem;
+  padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.footer-name {
+  font-family: 'Cormorant Garamond', serif; font-size: 2.4rem;
+  font-weight: 300; letter-spacing: 0.24em; color: var(--warm); margin-bottom: 0.5rem;
+}
+.footer-sub {
+  font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(237,229,216,0.25); margin-bottom: 1.4rem;
+}
+.footer-brand-txt {
+  font-size: 0.8rem; font-weight: 300; line-height: 1.82;
+  color: rgba(237,229,216,0.38); max-width: 270px;
+}
+.footer-socials { display: flex; gap: 0.75rem; margin-top: 1.8rem; }
+.footer-social {
+  width: 2rem; height: 2rem; border: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(237,229,216,0.35); font-size: 0.62rem;
+  transition: all 0.3s; letter-spacing: 0;
+}
+.footer-social:hover { border-color: var(--gold); color: var(--gold); }
+.footer-col-ttl {
+  font-size: 0.6rem; letter-spacing: 0.32em; text-transform: uppercase;
+  color: rgba(237,229,216,0.28); margin-bottom: 1.5rem;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.82rem; }
+.footer-col ul a {
+  font-size: 0.8rem; font-weight: 300; color: rgba(237,229,216,0.5);
+  transition: color 0.3s;
+}
+.footer-col ul a:hover { color: var(--gold); }
+.footer-info { font-size: 0.8rem; font-weight: 300; color: rgba(237,229,216,0.45); line-height: 1.72; }
+.footer-bot {
+  padding-top: 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-copy { font-size: 0.63rem; color: rgba(237,229,216,0.18); letter-spacing: 0.08em; }
+
+/* ==========================================================
+   WHATSAPP FAB
+========================================================== */
+.wa-fab {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+  width: 52px; height: 52px; background: #25D366; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 24px rgba(37,211,102,0.32);
+  transition: transform 0.3s;
+  opacity: 0; animation: waPop 0.5s ease 3.2s forwards;
+}
+.wa-fab:hover { transform: scale(1.1); }
+.wa-fab svg { width: 24px; height: 24px; fill: white; }
+@keyframes waPop { to { opacity: 1; } }
+
+/* ==========================================================
+   INSTAGRAM
+========================================================== */
+.insta { padding: 6.5rem 4.5rem; background: var(--linen); }
+.insta-hd { text-align: center; margin-bottom: 3rem; }
+.insta-hd .label-center { margin-bottom: 1rem; }
+.insta-hd h2 { margin-bottom: 0.6rem; }
+.insta-hd p { font-size: 0.82rem; color: var(--text3); }
+.insta-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 3px;
+  margin-bottom: 2.5rem;
+}
+.insta-item {
+  aspect-ratio: 1; overflow: hidden; position: relative;
+  cursor: pointer; display: block;
+}
+.insta-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.insta-item:hover img { transform: scale(1.08); }
+.insta-over {
+  position: absolute; inset: 0;
+  background: rgba(42,33,28,0);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.35s;
+}
+.insta-over svg { opacity: 0; transition: opacity 0.35s; fill: white; width: 28px; height: 28px; }
+.insta-item:hover .insta-over { background: rgba(42,33,28,0.35); }
+.insta-item:hover .insta-over svg { opacity: 1; }
+.insta-cta { text-align: center; }
+.insta-handle {
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--charcoal); border: 1.5px solid var(--charcoal);
+  padding: 0.9rem 2.2rem; transition: all 0.3s;
+}
+.insta-handle:hover { background: var(--charcoal); color: white; }
+.insta-handle svg { width: 16px; height: 16px; fill: currentColor; }
+
+/* ==========================================================
+   REVEAL ANIMATIONS
+========================================================== */
+.rv {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.82s cubic-bezier(.16,1,.3,1), transform 0.82s cubic-bezier(.16,1,.3,1);
+}
+.rl {
+  opacity: 0; transform: translateX(-30px);
+  transition: opacity 0.82s cubic-bezier(.16,1,.3,1), transform 0.82s cubic-bezier(.16,1,.3,1);
+}
+.rr {
+  opacity: 0; transform: translateX(30px);
+  transition: opacity 0.82s cubic-bezier(.16,1,.3,1), transform 0.82s cubic-bezier(.16,1,.3,1);
+}
+.rv.in, .rl.in, .rr.in { opacity: 1; transform: none; }
+.d1 { transition-delay: 0.1s; }
+.d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; }
+.d4 { transition-delay: 0.4s; }
+.d5 { transition-delay: 0.5s; }
+
+/* ==========================================================
+   TABLET
+========================================================== */
+@media (max-width: 1100px) {
+  nav { padding: 1.1rem 2.5rem; }
+  .nav-links { gap: 1.8rem; }
+  .hero-inner { padding: 0 3rem 4rem; }
+  .hero-right { display: none; }
+  .intro { padding: 5.5rem 3rem; }
+  .services { padding: 5rem 2.5rem; }
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .savoir { grid-template-columns: 1fr; }
+  .savoir-img { aspect-ratio: 16/9; min-height: 0; }
+  .savoir-content { padding: 4rem 3rem; }
+  .boutique-panel { width: 88%; }
+  .team { grid-template-columns: 1fr; }
+  .team-img { min-height: 0; aspect-ratio: 3/2; }
+  .team-content { padding: 4rem 3rem; }
+  .mariage-intro { grid-template-columns: 1fr; }
+  .mariage-img { aspect-ratio: 3/2; min-height: 0; }
+  .mariage-panel { padding: 4rem 3rem; }
+  .mariage-gallery { grid-template-columns: 1fr 1fr; }
+  .univers { padding: 5rem 2.5rem; }
+  .univers-grid { grid-template-columns: 1fr 1fr; }
+  .ateliers { padding: 5rem 2.5rem; }
+  .ateliers-layout { grid-template-columns: 1fr; gap: 3rem; }
+  .ateliers-img { position: static; aspect-ratio: 16/9; }
+  .deco { padding: 5rem 2.5rem; }
+  .deco-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 220px 220px; }
+  .deco-main { grid-row: span 1; grid-column: span 2; }
+  .galerie { padding: 5rem 2.5rem; }
+  .insta { padding: 5rem 2.5rem; }
+  .insta-grid { grid-template-columns: repeat(3, 1fr); }
+  .contact-banner-txt { left: 3rem; }
+  .contact-body { grid-template-columns: 1fr; }
+  .contact-info { padding: 3.5rem 3rem; }
+  .contact-form { padding: 3.5rem 3rem; }
+  footer { padding: 3.5rem 3rem 2rem; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+}
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+@media (max-width: 720px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links, .nav-cta { display: none; }
+  .burger { display: flex; }
+  .hero-inner { padding: 0 1.5rem 3.5rem; flex-direction: column; align-items: flex-start; gap: 0; }
+  .hero-title { font-size: clamp(2.6rem, 9.5vw, 3.8rem); }
+  .hero-desc { display: none; }
+  .hero-right { display: none; }
+  .intro { padding: 4rem 1.5rem; }
+  .intro-pills { gap: 1.2rem; flex-direction: column; align-items: center; }
+  .services { padding: 4rem 1.5rem; }
+  .services-grid { grid-template-columns: 1fr; }
+  .savoir-content { padding: 3rem 1.5rem; }
+  .boutique { height: 500px; }
+  .boutique-panel { width: 94%; }
+  .boutique { height: 520px; }
+  .team-content { padding: 3rem 1.5rem; }
+  .mariage-panel { padding: 3rem 1.5rem; }
+  .mariage-gallery { grid-template-columns: 1fr; }
+  .univers { padding: 4rem 1.5rem; }
+  .univers-grid { grid-template-columns: 1fr; }
+  .univers-fig-main img { aspect-ratio: 4/3; }
+  .univers-fig-top img { aspect-ratio: 4/3; }
+  .univers-fig-bot img { aspect-ratio: 4/3; }
+  .ateliers { padding: 4rem 1.5rem; }
+  .atelier-row { grid-template-columns: 3.2rem 1fr auto; gap: 0.8rem; padding: 1.2rem 1rem; }
+  .deco { padding: 4rem 1.5rem; }
+  .deco-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .deco-main, .deco-sm { aspect-ratio: 4/3; }
+  .galerie { padding: 4rem 1.5rem; }
+  .insta { padding: 4rem 1.5rem; }
+  .insta-grid { grid-template-columns: repeat(3, 1fr); }
+  .galerie-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 190px 190px 190px; }
+  .g-item:first-child { grid-row: span 1; grid-column: span 2; }
+  .contact-banner { height: 300px; }
+  .contact-banner-txt { left: 1.5rem; bottom: 2rem; }
+  .contact-info { padding: 2.5rem 1.5rem; }
+  .contact-form { padding: 2.5rem 1.5rem; }
+  .form-row { grid-template-columns: 1fr; }
+  footer { padding: 3rem 1.5rem 1.5rem; }
+  .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-bot { flex-direction: column; gap: 0.8rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     LOADER
+============================================================ -->
+<div id="loader">
+  <div class="ld-name">PÖLA</div>
+  <div class="ld-sub">Artisan Fleuriste · Sautron</div>
+  <div class="ld-bar"></div>
+</div>
+
+<!-- ============================================================
+     MOBILE MENU
+============================================================ -->
+<div class="m-menu" id="mmenu">
+  <div class="m-logo"><img src="assets/LOGO.png" alt="PÖLA"></div>
+  <span class="m-close" onclick="closeMenu()">✕</span>
+  <a href="#" onclick="closeMenu()">Accueil</a>
+  <a href="#services" onclick="closeMenu()">Nos savoir-faire</a>
+  <a href="#mariage" onclick="closeMenu()">Mariages</a>
+  <a href="#ateliers" onclick="closeMenu()">Ateliers</a>
+  <a href="#contact" onclick="closeMenu()">Nous trouver</a>
+</div>
+
+<!-- ============================================================
+     NAV
+============================================================ -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <img src="assets/LOGO.png" alt="PÖLA" class="nav-logo-img">
+    <span class="nav-logo-text">PÖLA</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Savoir-faire</a></li>
+    <li><a href="#mariage">Mariages</a></li>
+    <li><a href="#ateliers">Ateliers</a></li>
+    <li><a href="#galerie">Univers</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Nous contacter</a>
+  <div class="burger" id="burger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- ============================================================
+     HERO — image 1
+============================================================ -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="assets/1.png" alt="Atelier floral PÖLA — Sautron" loading="eager">
+  </div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-tag">Artisan Fleuriste · Sautron</div>
+      <h1 class="hero-title">
+        Fleurs choisies<br>
+        <em>avec soin,</em><br>
+        offertes avec âme
+      </h1>
+      <p class="hero-desc">
+        Pauline et Laura créent des compositions florales sur mesure —
+        bouquets du quotidien, décors de mariage et ateliers créatifs —
+        depuis leur boutique au cœur de Sautron.
+      </p>
+      <div class="hero-btns">
+        <a href="#contact" class="btn btn-terra">Commander un bouquet</a>
+        <a href="#services" class="btn btn-ghost-light btn-arr">Découvrir</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-scroll">
+        <div class="hero-scroll-line"></div>
+        <span>Défiler</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     STRIP
+============================================================ -->
+<div class="strip" aria-hidden="true">
+  <div class="strip-track">
+    <span class="strip-item">Bouquets fraîches<span class="strip-dot"></span></span>
+    <span class="strip-item">Fleurs Séchées<span class="strip-dot"></span></span>
+    <span class="strip-item">Mariages & Cérémonies<span class="strip-dot"></span></span>
+    <span class="strip-item">Ateliers Floraux<span class="strip-dot"></span></span>
+    <span class="strip-item">Plantes & Déco<span class="strip-dot"></span></span>
+    <span class="strip-item">Événements<span class="strip-dot"></span></span>
+    <span class="strip-item">Artisan Fleuriste à Sautron<span class="strip-dot"></span></span>
+    <span class="strip-item">Bouquets fraîches<span class="strip-dot"></span></span>
+    <span class="strip-item">Fleurs Séchées<span class="strip-dot"></span></span>
+    <span class="strip-item">Mariages & Cérémonies<span class="strip-dot"></span></span>
+    <span class="strip-item">Ateliers Floraux<span class="strip-dot"></span></span>
+    <span class="strip-item">Plantes & Déco<span class="strip-dot"></span></span>
+    <span class="strip-item">Événements<span class="strip-dot"></span></span>
+    <span class="strip-item">Artisan Fleuriste à Sautron<span class="strip-dot"></span></span>
+  </div>
+</div>
+
+<!-- ============================================================
+     INTRO — image 16 en détail discret
+============================================================ -->
+<section class="intro">
+  <div class="intro-eyebrow rv">Notre engagement</div>
+  <h2 class="intro-title rv d1">
+    Une boutique <em>vivante,</em><br>
+    des fleurs choisies chaque matin
+  </h2>
+  <p class="intro-body rv d2">
+    Chez PÖLA, chaque composition est pensée, chaque tige est choisie.
+    Pauline et Laura cultivent un univers floral sensible — ancré dans la saison,
+    nourri par le soin du détail et une vraie passion du végétal.
+  </p>
+  <div class="intro-pills rv d3">
+    <div class="intro-pill">Fleurs de saison</div>
+    <div class="intro-pill">Compositions sur mesure</div>
+    <div class="intro-pill">Conseil personnalisé</div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SERVICES — images 2, 3, 9, 8, 4, 10
+============================================================ -->
+<section class="services" id="services">
+  <div class="section-hd">
+    <div class="label rv">Nos savoir-faire</div>
+    <h2 class="h-md rv d1" style="margin-top:0.85rem;max-width:500px">
+      De la fleur fraîche<br><em>à la création durable</em>
+    </h2>
+  </div>
+  <div class="services-grid">
+
+    <div class="s-card rv">
+      <div class="s-img">
+        <img src="assets/2.png" alt="Bouquets et compositions florales fraîches">
+      </div>
+      <div class="s-body">
+        <div class="s-num">01</div>
+        <div class="s-name">Bouquets & Compositions</div>
+        <p class="s-desc">Fleurs coupées fraîches, assemblages sur mesure selon vos envies et la saison. Du quotidien à l'exceptionnel.</p>
+        <span class="s-link">Commander</span>
+      </div>
+    </div>
+
+    <div class="s-card rv d1">
+      <div class="s-img">
+        <img src="assets/3.png" alt="Fleurs séchées, couronnes et créations durables">
+      </div>
+      <div class="s-body">
+        <div class="s-num">02</div>
+        <div class="s-name">Fleurs Séchées</div>
+        <p class="s-desc">Couronnes, cloches, lettres, miroirs — des créations durables et poétiques, à offrir ou à conserver longtemps.</p>
+        <span class="s-link">Découvrir</span>
+      </div>
+    </div>
+
+    <div class="s-card rv d2">
+      <div class="s-img">
+        <img src="assets/9.png" alt="Mariages et cérémonies — arche florale">
+      </div>
+      <div class="s-body">
+        <div class="s-num">03</div>
+        <div class="s-name">Mariages & Cérémonies</div>
+        <p class="s-desc">Bouquet de mariée, boutonnières, arche florale, centres de table — un accompagnement sur mesure pour votre grand jour.</p>
+        <span class="s-link">Demander un devis</span>
+      </div>
+    </div>
+
+    <div class="s-card rv">
+      <div class="s-img">
+        <img src="assets/8.png" alt="Événements et tables fleuries">
+      </div>
+      <div class="s-body">
+        <div class="s-num">04</div>
+        <div class="s-name">Événements & Tables Fleuries</div>
+        <p class="s-desc">Installations florales sur mesure pour vos réceptions, événements d'entreprise et célébrations privées.</p>
+        <span class="s-link">Nous contacter</span>
+      </div>
+    </div>
+
+    <div class="s-card rv d1">
+      <div class="s-img">
+        <img src="assets/4.png" alt="Ateliers floraux créatifs à Sautron">
+      </div>
+      <div class="s-body">
+        <div class="s-num">05</div>
+        <div class="s-name">Ateliers Floraux</div>
+        <p class="s-desc">Venez créer votre propre composition dans notre boutique. Des moments conviviaux guidés par Pauline et Laura, en petit comité.</p>
+        <span class="s-link">Voir les dates</span>
+      </div>
+    </div>
+
+    <div class="s-card rv d2">
+      <div class="s-img">
+        <img src="assets/10.png" alt="Plantes, terrariums et boutique déco végétale">
+      </div>
+      <div class="s-body">
+        <div class="s-num">06</div>
+        <div class="s-name">Plantes & Boutique Déco</div>
+        <p class="s-desc">Terrariums, cloches botaniques, objets végétaux et petits cadeaux nature — un univers à découvrir en boutique.</p>
+        <span class="s-link">En boutique</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SAVOIR-FAIRE — image 11
+============================================================ -->
+<section class="savoir">
+  <div class="savoir-img rl">
+    <img src="assets/11.png" alt="Le geste artisanal PÖLA — mains au travail floral">
+  </div>
+  <div class="savoir-content rr">
+    <div class="label">L'art floral</div>
+    <h2 class="h-md" style="margin-top:0.9rem;margin-bottom:0.8rem">
+      Le geste artisanal,<br><em>au cœur de tout</em>
+    </h2>
+    <p class="body-txt">
+      Chaque bouquet est une composition pensée, jamais répétée.
+      De la sélection des fleurs jusqu'à l'emballage final,
+      Pauline et Laura apportent leur regard et leur sensibilité à chaque étape.
+    </p>
+    <div class="savoir-pts">
+      <div class="savoir-pt">
+        <div class="savoir-dot"></div>
+        <div class="savoir-pt-txt">
+          <strong>Sélection rigoureuse</strong>
+          Des fleurs choisies chaque matin, selon la saison et la qualité.
+        </div>
+      </div>
+      <div class="savoir-pt">
+        <div class="savoir-dot"></div>
+        <div class="savoir-pt-txt">
+          <strong>Composition sur mesure</strong>
+          Chaque bouquet naît d'un échange avec vous, adapté à vos envies.
+        </div>
+      </div>
+      <div class="savoir-pt">
+        <div class="savoir-dot"></div>
+        <div class="savoir-pt-txt">
+          <strong>Soin de l'emballage</strong>
+          Des finitions soignées qui font de chaque bouquet un vrai cadeau.
+        </div>
+      </div>
+      <div class="savoir-pt">
+        <div class="savoir-dot"></div>
+        <div class="savoir-pt-txt">
+          <strong>Conseil sincère</strong>
+          Un accompagnement humain pour chaque occasion, petite ou grande.
+        </div>
+      </div>
+    </div>
+    <a href="#contact" class="btn btn-dark" style="align-self:flex-start">Commander un bouquet</a>
+  </div>
+</section>
+
+<!-- ============================================================
+     LA BOUTIQUE — image 6
+============================================================ -->
+<section class="boutique">
+  <div class="boutique-bg">
+    <img src="assets/6.png" alt="Intérieur de la boutique PÖLA à Sautron">
+  </div>
+  <div class="boutique-panel rv">
+    <div class="label label-light">La boutique</div>
+    <h2 class="boutique-title">Un lieu vivant,<br><em>une boutique d'auteur</em></h2>
+    <p class="boutique-desc">
+      Plus qu'un espace de vente, PÖLA est un lieu chaleureux où il fait bon s'arrêter.
+      Plantes, fleurs fraîches, objets botaniques et parfums naturels —
+      venez vous y ressourcer à Sautron.
+    </p>
+    <a href="#contact" class="btn btn-ghost-light">Venir à la boutique</a>
+  </div>
+</section>
+
+<!-- ============================================================
+     MARIAGE — images 5, 8, 9
+============================================================ -->
+<section class="mariage" id="mariage">
+  <div class="mariage-intro">
+    <div class="mariage-img rl">
+      <img src="assets/5.png" alt="Bouquet de mariée PÖLA — composition sur mesure">
+    </div>
+    <div class="mariage-panel rr">
+      <div class="label label-gold">Mariages & Événements</div>
+      <h2 class="mariage-title">
+        Votre plus beau jour,<br><em>fleuri avec soin</em>
+      </h2>
+      <p class="body-txt" style="color:rgba(237,229,216,0.62)">
+        De la première rencontre jusqu'au grand jour, Pauline et Laura
+        vous accompagnent pour créer un décor floral qui vous ressemble.
+        Naturel, élégant, mémorable.
+      </p>
+      <div class="mariage-feats">
+        <div class="mf">Bouquet de mariée & boutonnière</div>
+        <div class="mf">Arche florale & décoration de cérémonie</div>
+        <div class="mf">Centres de table & décoration de réception</div>
+        <div class="mf">Événements privés et professionnels</div>
+        <div class="mf">Rendez-vous personnalisé, devis gratuit</div>
+      </div>
+      <a href="#contact" class="btn btn-ghost-gold">Parler de votre projet</a>
+    </div>
+  </div>
+  <div class="mariage-gallery">
+    <div class="mg-item">
+      <img src="assets/8.png" alt="Table de mariage fleurie PÖLA — décoration de réception">
+      <div class="mg-cap">Décoration de table</div>
+    </div>
+    <div class="mg-item">
+      <img src="assets/9.png" alt="Arche florale cérémonie PÖLA">
+      <div class="mg-cap">Arche de cérémonie</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAULINE & LAURA — image 12
+============================================================ -->
+<section class="team">
+  <div class="team-img rl">
+    <img src="assets/12.png" alt="Pauline et Laura — créatrices de PÖLA Fleuriste">
+  </div>
+  <div class="team-content rr">
+    <div class="label">Pauline & Laura</div>
+    <h2 class="h-md" style="margin-top:0.9rem">
+      Deux sensibilités,<br><em>une même passion</em>
+    </h2>
+    <blockquote class="team-quote">
+      "Deux regards, un même goût du végétal, du détail et du travail bien fait."
+    </blockquote>
+    <p class="body-txt">
+      Pauline et Laura ont fondé PÖLA pour partager leur amour sincère des fleurs et du végétal.
+      Artisanes avant tout, elles mettent leur sensibilité et leur savoir-faire
+      au service de chaque cliente, chaque occasion, chaque composition.
+    </p>
+    <p class="body-txt" style="margin-top:1rem">
+      Leur boutique, à Sautron, est le reflet de qui elles sont : chaleureuse, soignée, vivante — et sans prétention.
+    </p>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     ATELIERS — image 4
+============================================================ -->
+<section class="ateliers" id="ateliers">
+  <div class="label rv">Ateliers Floraux</div>
+  <h2 class="h-md rv d1" style="margin-top:0.85rem;max-width:520px">
+    Créez, apprenez,<br><em>repartez avec votre création</em>
+  </h2>
+  <div class="ateliers-layout">
+    <div class="ateliers-img rl">
+      <img src="assets/4.png" alt="Atelier floral PÖLA — apprendre à créer en boutique">
+    </div>
+    <div class="ateliers-body rr">
+      <p class="body-txt">
+        Des moments conviviaux et créatifs — autour d'un apéro ou d'un goûter —
+        pour apprendre à travailler les fleurs séchées, créer une couronne,
+        un accessoire ou un cadre personnalisé.
+        Guidés avec soin par Pauline et Laura, en petit comité de 6 à 8 personnes.
+      </p>
+      <div class="atelier-list" style="margin-top:2rem">
+        <div class="atelier-row">
+          <div class="ar-date">Jeu 7<br>Mai</div>
+          <div><div class="ar-name">Cloche en fleurs séchées</div><div class="ar-type">Atelier / Apéro</div></div>
+          <div class="ar-price">39 €</div>
+        </div>
+        <div class="atelier-row">
+          <div class="ar-date">Sam 9<br>Mai</div>
+          <div><div class="ar-name">Couronne en fleurs séchées</div><div class="ar-type">Atelier / Goûter</div></div>
+          <div class="ar-price">45 €</div>
+        </div>
+        <div class="atelier-row">
+          <div class="ar-date">Jeu 11<br>Juin</div>
+          <div><div class="ar-name">Accessoires en fleurs séchées</div><div class="ar-type">Atelier / Apéro</div></div>
+          <div class="ar-price">39 €</div>
+        </div>
+        <div class="atelier-row">
+          <div class="ar-date">Sam 13<br>Juin</div>
+          <div><div class="ar-name">Lettre en fleurs séchées</div><div class="ar-type">Atelier / Goûter</div></div>
+          <div class="ar-price">29 €</div>
+        </div>
+        <div class="atelier-row">
+          <div class="ar-date">Jeu 25<br>Juin</div>
+          <div><div class="ar-name">Miroir ou tambour en fleurs</div><div class="ar-type">Atelier / Apéro</div></div>
+          <div class="ar-price">29 €</div>
+        </div>
+        <div class="atelier-row">
+          <div class="ar-date">Jeu 9<br>Juil</div>
+          <div><div class="ar-name">Accessoires fleurs séchées</div><div class="ar-type">Atelier / Apéro</div></div>
+          <div class="ar-price">39 €</div>
+        </div>
+        <div class="atelier-row">
+          <div class="ar-date">Sam 18<br>Juil</div>
+          <div><div class="ar-name">Cadre en fleurs pressées</div><div class="ar-type">Atelier / Goûter</div></div>
+          <div class="ar-price">39 €</div>
+        </div>
+        <div class="ateliers-note">
+          <strong>Réservation obligatoire</strong> — Places limitées à 6–8 personnes.<br>
+          Contactez-nous par téléphone ou Instagram pour réserver votre place.
+        </div>
+      </div>
+      <div style="margin-top:1.5rem">
+        <a href="https://wa.me/33228910928" target="_blank" class="btn btn-terra">Réserver ma place</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BOUTIQUE DÉCO — images 10, 13, 16
+============================================================ -->
+<section class="deco">
+  <div class="label rv">Boutique & Déco végétale</div>
+  <h2 class="h-md rv d1" style="margin-top:0.85rem;max-width:520px">
+    Un univers à explorer,<br><em>à offrir ou à garder</em>
+  </h2>
+  <p class="body-txt deco-intro rv d2">
+    En boutique, PÖLA propose aussi un univers de cadeaux et d'objets végétaux :
+    terrariums, cloches botaniques, couronnes séchées et créations artisanales
+    pensées pour durer.
+  </p>
+  <div class="deco-grid rv d3">
+    <div class="deco-main">
+      <img src="assets/10.png" alt="Plantes et déco végétale — boutique PÖLA Sautron">
+    </div>
+    <div class="deco-sm">
+      <img src="assets/13.png" alt="Couronne de fleurs séchées artisanale PÖLA">
+    </div>
+    <div class="deco-sm">
+      <img src="assets/16.png" alt="Carte PÖLA — le soin du détail de marque">
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     GALERIE — images 15, 2, 16, 3, 14
+============================================================ -->
+<section class="galerie" id="galerie">
+  <div class="galerie-hd">
+    <div class="label label-center rv">L'univers PÖLA</div>
+    <h2 class="h-md rv d1" style="text-align:center;margin-top:0.8rem">Un regard sur notre travail</h2>
+  </div>
+  <div class="galerie-grid rv d2">
+    <div class="g-item">
+      <img src="assets/15.png" alt="Bouquet prêt à offrir PÖLA">
+      <div class="g-over"></div>
+    </div>
+    <div class="g-item">
+      <img src="assets/2.png" alt="Compositions florales fraîches PÖLA">
+      <div class="g-over"></div>
+    </div>
+    <div class="g-item">
+      <img src="assets/16.png" alt="Carte et détail de marque PÖLA">
+      <div class="g-over"></div>
+    </div>
+    <div class="g-item">
+      <img src="assets/3.png" alt="Fleurs séchées et créations durables PÖLA">
+      <div class="g-over"></div>
+    </div>
+    <div class="g-item">
+      <img src="assets/14.png" alt="Univers floral et textures botaniques PÖLA">
+      <div class="g-over"></div>
+    </div>
+  </div>
+  <div class="ig-cta rv d3">
+    <a href="https://www.instagram.com/pola.artisanfleuriste/" target="_blank" class="ig-link">
+      Suivre @pola.artisanfleuriste sur Instagram
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================
+     INSTAGRAM — 6 dernières photos
+============================================================ -->
+<section class="insta">
+  <div class="insta-hd">
+    <div class="label label-center rv">Instagram</div>
+    <h2 class="h-md rv d1">@pola.artisanfleuriste</h2>
+    <p class="rv d2">Suivez notre quotidien floral et nos dernières créations</p>
+  </div>
+
+  <!-- Widget Behold — derniers posts Instagram en temps réel -->
+  <div id="bhld-RRUM5" style="margin-bottom:2.5rem"></div>
+  <script>
+    window.Behold = window.Behold || function() {
+      (window.Behold.q = window.Behold.q || []).push(arguments);
+    };
+    Behold('init', 'RRUM5', 'bhld-RRUM5');
+  </script>
+  <script async src="https://w.behold.so/widget.js"></script>
+
+  <div class="insta-cta rv d3">
+    <a href="https://www.instagram.com/pola.artisanfleuriste/" target="_blank" class="insta-handle">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      Suivre @pola.artisanfleuriste
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT — image 7
+============================================================ -->
+<section class="contact" id="contact">
+  <div class="contact-banner">
+    <img src="assets/7.png" alt="Façade et devanture de la boutique PÖLA à Sautron">
+    <div class="contact-banner-txt">
+      <div class="label label-light">Nous trouver</div>
+      <h2>Venez nous rendre visite</h2>
+      <p>La boutique PÖLA vous accueille à Sautron</p>
+    </div>
+  </div>
+  <div class="contact-body">
+    <div class="contact-info">
+      <div class="label" style="margin-bottom:2rem">Informations pratiques</div>
+      <div class="contact-dets">
+        <div class="cd">
+          <i class="cd-icon">⌖</i>
+          <div>
+            <div class="cd-lbl">Adresse</div>
+            <div class="cd-val">Sautron, Loire-Atlantique (44)</div>
+          </div>
+        </div>
+        <div class="cd">
+          <i class="cd-icon">◷</i>
+          <div>
+            <div class="cd-lbl">Horaires d'ouverture</div>
+            <div class="cd-val">
+              Mardi – Vendredi : 9h30 – 19h00<br>
+              Samedi : 9h30 – 18h00<br>
+              Dimanche & Lundi : fermé
+            </div>
+          </div>
+        </div>
+        <div class="cd">
+          <i class="cd-icon">✆</i>
+          <div>
+            <div class="cd-lbl">Téléphone</div>
+            <div class="cd-val">02 28 91 09 28</div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-acts">
+        <a href="https://wa.me/33228910928" target="_blank" class="btn btn-dark">Écrire sur WhatsApp</a>
+        <a href="tel:0228910928" class="btn btn-ghost-dark">Appeler la boutique</a>
+        <a href="https://www.instagram.com/pola.artisanfleuriste/" target="_blank" class="btn btn-ghost-dark">Nous suivre sur Instagram</a>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-ttl">Nous écrire</div>
+      <div class="form-row">
+        <div class="form-g">
+          <label class="form-lbl">Prénom</label>
+          <input type="text" class="form-inp" placeholder="Marie">
+        </div>
+        <div class="form-g">
+          <label class="form-lbl">Nom</label>
+          <input type="text" class="form-inp" placeholder="Dupont">
+        </div>
+      </div>
+      <div class="form-g">
+        <label class="form-lbl">Email</label>
+        <input type="email" class="form-inp" placeholder="votre@email.fr">
+      </div>
+      <div class="form-g">
+        <label class="form-lbl">Sujet</label>
+        <select class="form-sel">
+          <option>Commander un bouquet</option>
+          <option>Mariage & Événement</option>
+          <option>Réserver un atelier</option>
+          <option>Plantes & boutique déco</option>
+          <option>Autre demande</option>
+        </select>
+      </div>
+      <div class="form-g">
+        <label class="form-lbl">Message</label>
+        <textarea class="form-area" placeholder="Dites-nous comment nous pouvons vous aider…"></textarea>
+      </div>
+      <button class="form-submit">Envoyer le message</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-name">PÖLA</div>
+      <div class="footer-sub">Artisan Fleuriste · Sautron</div>
+      <p class="footer-brand-txt">
+        Pauline et Laura créent des compositions florales avec soin et passion,
+        depuis leur boutique au cœur de Sautron, en Loire-Atlantique.
+      </p>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/pola.artisanfleuriste/" target="_blank" class="footer-social" title="Instagram">ig</a>
+        <a href="https://wa.me/33228910928" target="_blank" class="footer-social" title="WhatsApp">wa</a>
+        <a href="tel:0228910928" class="footer-social" title="Téléphone">✆</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-ttl">Navigation</div>
+      <ul>
+        <li><a href="#services">Nos savoir-faire</a></li>
+        <li><a href="#mariage">Mariages & Événements</a></li>
+        <li><a href="#ateliers">Ateliers floraux</a></li>
+        <li><a href="#galerie">L'univers PÖLA</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-ttl">Informations</div>
+      <p class="footer-info">Sautron, Loire-Atlantique (44)</p>
+      <p class="footer-info" style="margin-top:0.9rem">
+        Mar–Ven : 9h30 – 19h00<br>
+        Samedi : 9h30 – 18h00<br>
+        Dim & Lun : fermé
+      </p>
+      <p class="footer-info" style="margin-top:0.9rem">02 28 91 09 28</p>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <div class="footer-copy">© 2025 PÖLA Artisan Fleuriste · Sautron</div>
+    <div class="footer-copy">Fait avec soin · Loire-Atlantique</div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     WHATSAPP FAB
+============================================================ -->
+<a href="https://wa.me/33228910928" target="_blank" class="wa-fab" title="Nous contacter sur WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+/* LOADER */
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1900);
+});
+
+/* NAV SCROLL */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 55);
+}, { passive: true });
+
+/* MOBILE MENU */
+function toggleMenu() { document.getElementById('mmenu').classList.toggle('open'); }
+function closeMenu() { document.getElementById('mmenu').classList.remove('open'); }
+
+/* SCROLL REVEAL */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.rv, .rl, .rr').forEach(el => observer.observe(el));
+
+/* HERO ENTRANCE — after loader */
+setTimeout(() => {
+  const els = ['.hero-tag', '.hero-title', '.hero-desc', '.hero-btns', '.hero-scroll'];
+  els.forEach((sel, i) => {
+    const el = document.querySelector(sel);
+    if (!el) return;
+    el.style.cssText = `opacity:0;transform:translateY(22px);transition:opacity 0.85s ease ${1.9 + i * 0.14}s,transform 0.85s ease ${1.9 + i * 0.14}s`;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    }));
+  });
+}, 100);
+</script>
+</body>
+</html>
